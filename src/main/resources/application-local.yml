@@ -1,15 +1,11 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:tonefitdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:15432/${DB_NAME:tonefitdb}
+    username: ${DB_USERNAME:tonefit_user}
+    password: ${DB_PASSWORD:tonefit1234}
   jpa:
-    database-platform: org.hibernate.dialect.H2Dialect
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true

@@ -1,6 +1,7 @@
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
+#    url: jdbc:postgresql://db:5432/${DB_NAME:tonefitdb}
     url: jdbc:postgresql://db:5432/${DB_NAME:tonefitdb}
     username: ${DB_USERNAME:tonefit_user}
     password: ${DB_PASSWORD:tonefit1234}
