@@ -1,6 +1,6 @@
 package com.example.tonefitserver.core.exception;
 
-import com.example.tonefitserver.core.common.ApiResponse;
+import com.example.tonefitserver.core.dto.ApiResponse;
 import com.example.tonefitserver.core.enums.ErrorType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

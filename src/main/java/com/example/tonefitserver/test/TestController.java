@@ -1,6 +1,6 @@
 package com.example.tonefitserver.test;
 
-import com.example.tonefitserver.core.common.ApiResponse;
+import com.example.tonefitserver.core.dto.ApiResponse;
 import com.example.tonefitserver.core.enums.ErrorType;
 import com.example.tonefitserver.core.exception.BusinessException;
 import com.example.tonefitserver.core.security.JwtTokenProvider;
