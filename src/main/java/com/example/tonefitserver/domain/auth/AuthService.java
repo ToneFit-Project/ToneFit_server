@@ -1,6 +1,8 @@
 package com.example.tonefitserver.domain.auth;
 
+import com.example.tonefitserver.core.dto.auth.AuthResponse;
 import com.example.tonefitserver.core.dto.auth.LoginRequest;
+import com.example.tonefitserver.core.dto.auth.LoginResponse;
 import com.example.tonefitserver.core.dto.auth.ReissueRequest;
 import com.example.tonefitserver.core.dto.auth.SignupRequest;
 import com.example.tonefitserver.core.dto.auth.TokenResponse;
@@ -28,7 +30,7 @@ public class AuthService {
     private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
-    public void signup(SignupRequest request) {
+    public AuthResponse signup(SignupRequest request) {
         if (userRepository.existsByEmail(request.email())) {
             throw new BusinessException(ErrorType.EMAIL_ALREADY_EXISTS);
         }
@@ -37,13 +39,22 @@ public class AuthService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .status(UserStatus.ACTIVE)
+                .birthYear(request.birthYear())
+                .industry(request.industry())
+                .companySize(request.companySize())
+                .jobLevel(request.jobLevel())
+                .careerYear(request.careerYear())
                 .build();
 
         userRepository.save(user);
+
+        TokenResponse tokens = generateAndSaveTokens(user.getEmail());
+        return new AuthResponse(user.getId(), user.getEmail(), user.getPlan(),
+                tokens.accessToken(), tokens.refreshToken());
     }
 
     @Transactional
-    public TokenResponse login(LoginRequest request) {
+    public LoginResponse login(LoginRequest request) {
         User user = userRepository.findByEmailAndStatus(request.email(), UserStatus.ACTIVE)
                 .orElseThrow(() -> new BusinessException(ErrorType.USER_NOT_FOUND));
 
@@ -51,7 +62,10 @@ public class AuthService {
             throw new BusinessException(ErrorType.INVALID_PASSWORD);
         }
 
-        return generateAndSaveTokens(user.getEmail());
+        TokenResponse tokens = generateAndSaveTokens(user.getEmail());
+        return new LoginResponse(user.getId(), user.getEmail(), user.getPlan(),
+                user.getFreeUsed(), user.getCreditBalance(),
+                tokens.accessToken(), tokens.refreshToken());
     }
 
     @Transactional
