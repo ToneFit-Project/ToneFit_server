@@ -20,7 +20,10 @@ public class JwtTokenProvider {
     private String secretKeyString;
 
     @Value("${jwt.expiration}")
-    private long validityInMilliseconds;
+    private long accessValidityInMilliseconds;
+
+    // Refresh token expiration (e.g., 7 days)
+    private final long refreshValidityInMilliseconds = 7 * 24 * 60 * 60 * 1000L;
 
     private SecretKey key;
 
@@ -29,7 +32,15 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKeyString.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String createToken(String subject) {
+    public String createAccessToken(String subject) {
+        return createToken(subject, accessValidityInMilliseconds);
+    }
+
+    public String createRefreshToken(String subject) {
+        return createToken(subject, refreshValidityInMilliseconds);
+    }
+
+    private String createToken(String subject, long validityInMilliseconds) {
         Date now = new Date();
         Date validity = new Date(now.getTime() + validityInMilliseconds);
 

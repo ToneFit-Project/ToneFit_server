@@ -31,7 +31,7 @@ public class TestController {
 
     @GetMapping("/token")
     public ApiResponse<String> testToken(@RequestParam(defaultValue = "test-user") String user) {
-        return ApiResponse.success(jwtTokenProvider.createToken(user));
+        return ApiResponse.success(jwtTokenProvider.createAccessToken(user));
     }
 
     @GetMapping("/secure")
