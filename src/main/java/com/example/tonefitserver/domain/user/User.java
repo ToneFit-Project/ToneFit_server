@@ -1,6 +1,6 @@
 package com.example.tonefitserver.domain.user;
 
-import com.example.tonefitserver.core.enums.UserStatus;
+import com.example.tonefitserver.core.enums.*;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -33,6 +33,35 @@ public class User {
     @Enumerated(EnumType.STRING)
     private UserStatus status;
 
+    @Column(nullable = false)
+    private int birthYear;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Industry industry;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CompanySize companySize;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private JobLevel jobLevel;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CareerYear careerYear;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Plan plan;
+
+    @Column(nullable = false)
+    private int freeUsed;
+
+    @Column(nullable = false)
+    private int creditBalance;
+
     @CreatedDate
     private LocalDateTime createdAt;
 
@@ -40,13 +69,31 @@ public class User {
     private LocalDateTime updatedAt;
 
     @Builder
-    public User(String email, String password, UserStatus status) {
+    public User(String email, String password, UserStatus status,
+                int birthYear, Industry industry, CompanySize companySize,
+                JobLevel jobLevel, CareerYear careerYear) {
         this.email = email;
         this.password = password;
         this.status = status != null ? status : UserStatus.ACTIVE;
+        this.birthYear = birthYear;
+        this.industry = industry;
+        this.companySize = companySize;
+        this.jobLevel = jobLevel;
+        this.careerYear = careerYear;
+        this.plan = Plan.FREE;
+        this.freeUsed = 0;
+        this.creditBalance = 0;
     }
 
     public void deactivate() {
         this.status = UserStatus.INACTIVE;
+    }
+
+    public void updateProfile(Industry industry, CompanySize companySize,
+                              JobLevel jobLevel, CareerYear careerYear) {
+        if (industry != null) this.industry = industry;
+        if (companySize != null) this.companySize = companySize;
+        if (jobLevel != null) this.jobLevel = jobLevel;
+        if (careerYear != null) this.careerYear = careerYear;
     }
 }
